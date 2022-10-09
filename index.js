@@ -60,7 +60,10 @@ let time0, time1;
 function compassOrientation() {
 
   if (window.DeviceOrientationEvent) {
-      window.addEventListener('deviceorientation', function(event) {
+    DeviceOrientationEvent['requestPermission']()
+    .then(permissionState => {
+    if (permissionState === 'granted') {
+    window.addEventListener('deviceorientation', (event) =>  {
           var alpha = null;
           //Check for iOS property
           if (event.webkitCompassHeading) {
