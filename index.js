@@ -59,24 +59,35 @@ let time0, time1;
 
 function compassOrientation() {
 
-  if (window.DeviceOrientationEvent) {
-    DeviceOrientationEvent['requestPermission']()
-    .then(permissionState => {
-    if (permissionState === 'granted') {
-    window.addEventListener('deviceorientation', (event) =>  {
-          var alpha = null;
-          //Check for iOS property
-          if (event.webkitCompassHeading) {
-              alpha = event.webkitCompassHeading;
-          }
-          //non iOS
-          else {
-              alpha = event.alpha;
-          }
-          console.log(360 - alpha);
-          myLocationMarker.set('icon', locationIcon);
-      }, false);
+  if (typeof DeviceMotionEvent.requestPermission === 'function') {
+                      
+    // for IOS devices
+    document.getElementById("log").innerText = "IOS! ";
+    
+    // get device orientation sensor data
+    DeviceOrientationEvent.requestPermission().then(response => {
+        if (response === 'granted') {
+            window.addEventListener('deviceorientation', OrientationHandler, true);
+        }else if (result.state === 'prompt') {
+            document.getElementById("log").innerText = "Need prompt!";
+        }else{
+            document.getElementById("log").innerText += "Not Supported!";
+        }
+    }).catch(console.error)
+    
+  } else {
+      
+      // for non ios devices
+      document.getElementById("log").innerText = "NonIOS! ";
+      
+      // get device orientation sensor data
+      window.addEventListener('deviceorientation', OrientationHandler, true);
   }
+
+}
+
+function OrientationHandler(eventData){
+  console.log("alpha " + eventData.alpha);
 }
 
 
