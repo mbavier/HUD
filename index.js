@@ -50,7 +50,8 @@ function step() {
   requestAnimationFrame(step);
 }
 
-document.getElementById('start').addEventListener( () => {
+document.getElementById('start').onclick( () => {
+  document.getElementById('start').style.display = "none";
   window.initMap = initMap;
   requestAnimationFrame(step);
 });
