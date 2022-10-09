@@ -9,17 +9,17 @@ body {background-color: #000000;}
   
 /* Set the size of the div element that contains the map */
 #map {
-  height: 300px;
+  height: 200px;
   /* The height is 400 pixels */
   width: 100%;
+  visibility: hidden;
 }
 
 #map-container {
   position: fixed;
-  bottom:300px;
+  bottom: 120px;
   padding-bottom: 1%;
   padding-left: 1%;
-  float: left;
   width:20%;
-  height:0;
+  height:20%;
 }
