@@ -14,4 +14,4 @@ function initMap() {
   }
   
   window.initMap = initMap;
-  
+  console.log("Run")
