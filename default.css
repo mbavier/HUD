@@ -13,9 +13,6 @@ body {background-color: #000000;}
   /* The height is 400 pixels */
   width: 100%;
   position: absolute;
-  left:0;
-  /* The width is the width of the web page */
-  background-color: red;
 }
 
 #map-container {
