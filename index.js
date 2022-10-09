@@ -79,15 +79,12 @@ function compassOrientation() {
       
       // for non ios devices
       console.log("NonIOS! ");
-      
-      // get device orientation sensor data
-      window.addEventListener('deviceorientation', OrientationHandler, true);
   }
 
 }
-
+let compassImage = document.getElementById('compass');
 function OrientationHandler(eventData){
-  console.log("alpha " + eventData.webkitCompassHeading);
+  compassImage.style.transform = `rotate(${eventData.webkitCompassHeading}deg)`;
 }
 
 

@@ -23,3 +23,12 @@ body {background-color: #000000;}
   width:20%;
   height:20%;
 }
+
+#compass {
+  position: fixed;
+  bottom: 60px;
+  padding-bottom: 1%;
+  right: 25px;
+  width:200px;
+  height:200px;
+}
