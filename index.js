@@ -87,7 +87,7 @@ function compassOrientation() {
 }
 
 function OrientationHandler(eventData){
-  console.log("alpha " + eventData.alpha);
+  console.log("alpha " + eventData.webkitCompassHeading);
 }
 
 
