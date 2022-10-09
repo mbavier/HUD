@@ -62,23 +62,23 @@ function compassOrientation() {
   if (typeof DeviceMotionEvent.requestPermission === 'function') {
                       
     // for IOS devices
-    document.getElementById("log").innerText = "IOS! ";
+    console.log("IOS!");
     
     // get device orientation sensor data
     DeviceOrientationEvent.requestPermission().then(response => {
         if (response === 'granted') {
             window.addEventListener('deviceorientation', OrientationHandler, true);
         }else if (result.state === 'prompt') {
-            document.getElementById("log").innerText = "Need prompt!";
+          console.log("Need prompt!");
         }else{
-            document.getElementById("log").innerText += "Not Supported!";
+          console.log("Not Supported!");
         }
     }).catch(console.error)
     
   } else {
       
       // for non ios devices
-      document.getElementById("log").innerText = "NonIOS! ";
+      console.log("NonIOS! ");
       
       // get device orientation sensor data
       window.addEventListener('deviceorientation', OrientationHandler, true);
