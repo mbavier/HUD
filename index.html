@@ -5,6 +5,7 @@
     <script src="index.js" type="module"></script>
     <link rel="stylesheet" href="default.css">
     <meta charset="UTF-8" />
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <!-- Makes imports and modules work on safari -->
     <!-- <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
     <script type="importmap">
@@ -19,10 +20,11 @@
   </head>
   <body>
     <div class="center">
-        Test
-        <p id="demo"></p>
-        <button id="go">Go</button>
+        <div id="map"></div>
     </div>
-    
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCE0PCwgZ_x52jU32UJTknEGwCXbORC7bs&callback=initMap&v=weekly"
+      defer
+    ></script>
     </body>
 </html>
