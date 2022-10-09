@@ -50,9 +50,9 @@ function step() {
   requestAnimationFrame(step);
 }
 
-document.getElementById('start').onclick( () => {
+document.getElementById('start').onclick = () => {
   document.getElementById('start').style.display = "none";
   window.initMap = initMap;
   requestAnimationFrame(step);
-});
+};
 
