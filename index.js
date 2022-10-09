@@ -56,11 +56,33 @@ let time0, time1;
 //   requestAnimationFrame(step);
   
 // }
+
+function compassOrientation() {
+
+  if (window.DeviceOrientationEvent) {
+      window.addEventListener('deviceorientation', function(event) {
+          var alpha = null;
+          //Check for iOS property
+          if (event.webkitCompassHeading) {
+              alpha = event.webkitCompassHeading;
+          }
+          //non iOS
+          else {
+              alpha = event.alpha;
+          }
+          console.log(360 - alpha);
+          myLocationMarker.set('icon', locationIcon);
+      }, false);
+  }
+}
+
+
 document.getElementById('start').onclick = () => {
   time0 = performance.now();
   document.getElementById('start').style.display = "none";
   document.getElementById('map').style.visibility = "visible";
-  getLocation()
+  //getLocation()
+  compassOrientation();
   //requestAnimationFrame(step);
 };
 
