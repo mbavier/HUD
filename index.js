@@ -76,6 +76,16 @@ function compassOrientation() {
           console.log("Not Supported!");
         }
     }).catch(console.error)
+
+    DeviceMotionEvent.requestPermission().then(response => {
+      if (response === 'granted') {
+          window.addEventListener('devicemotion', MotionHandler, true);
+      }else if (result.state === 'prompt') {
+        console.log("Need prompt!");
+      }else{
+        console.log("Not Supported!");
+      }
+  }).catch(console.error)
   } else {
       
       // for non ios devices
@@ -85,8 +95,47 @@ function compassOrientation() {
 }
 let compassImage = document.getElementById('compass');
 
-let calibrationBeta = null;
-let calibrationGamma = null;
+// let calibrationBeta = null;
+// let calibrationGamma = null;
+let currentFacingRad = null;
+
+// Motion Handler Shake method from Shake.js
+let shakeThreshold = 15;
+let lastMotion = {
+  x = null,
+  y = null,
+  z = null
+}
+
+let currentNS = 0;
+let currentEW = 0;
+
+function MotionHandler(eventData) {
+  let current = eventData.accelerationIncludingGravity;
+  let deltaX = 0;
+  let deltaY = 0;
+  let deltaZ = 0;
+
+  if ((lastMotion.x == null) && (lastMotion.y == null) && (lastMotion.z == null)) {
+    lastMotion.x = current.x;
+    lastMotion.y = current.y;
+    lastMotion.z = current.z;
+  }
+
+  deltaX = Math.abs(lastMotion.x - current.x);
+  deltaY = Math.abs(lastMotion.y - current.y);
+  deltaZ = Math.abs(lastMotion.z - current.z);
+
+  if ((((deltaX > shakeThreshold) && (deltaY > shakeThreshold)) || ((deltaX > shakeThreshold) && (deltaZ > shakeThreshold)) || ((deltaY > shakeThreshold) && (deltaZ > shakeThreshold))) && currentFacingRad != null) {
+    currentNS += Math.cos(currentFacingRad);
+    currentEW += Math.sin(currentFacingRad)
+    
+    xDisplacement.innerHTML = `NS: ${currentNS}`;
+    yDisplacement.innerHTML = `EW: ${currentEW}`;
+  }
+}
+
+
 
 function OrientationHandler(eventData){
   if (calibrationBeta == null) {
@@ -94,17 +143,18 @@ function OrientationHandler(eventData){
     calibrationGamma = eventData.gamma;
   }
   compassImage.style.transform = `rotate(${eventData.webkitCompassHeading}deg)`;
-  if (eventData.beta - calibrationBeta > 5) {
-    xDisplacement.innerHTML = `X Rotation = ${eventData.beta - calibrationBeta}`;
-  } else {
-    xDisplacement.innerHTML = `X Rotation = 0`
-  }
+  currentFacingRad = eventData.webkitCompassHeading * (Math.PI/180);
+  // if (eventData.beta - calibrationBeta > 5) {
+  //   xDisplacement.innerHTML = `X Rotation = ${eventData.beta - calibrationBeta}`;
+  // } else {
+  //   xDisplacement.innerHTML = `X Rotation = 0`
+  // }
 
-  if (eventData.gamma - calibrationGamma > 5) {
-    yDisplacement.innerHTML = `Y Rotation = ${eventData.gamma - calibrationGamma}`;
-  } else {
-    yDisplacement.innerHTML = `Y Rotation = 0`
-  }
+  // if (eventData.gamma - calibrationGamma > 5) {
+  //   yDisplacement.innerHTML = `Y Rotation = ${eventData.gamma - calibrationGamma}`;
+  // } else {
+  //   yDisplacement.innerHTML = `Y Rotation = 0`
+  // }
   
   
 }
