@@ -1,11 +1,42 @@
+function getDistanceFromLatLon(lat1,lon1,lat2,lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2-lat1);  // deg2rad below
+  var dLon = deg2rad(lon2-lon1); 
+  var a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2)
+    ; 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  var d = R * c; // Distance in km
+  return d * 1000;
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI/180)
+}
+
+
 let map, locationMarker;
 
+var lastPos = {
+  lat: null,
+  lng: null
+};
 
 function success(position) {
   const pos = {
     lat: position.coords.latitude,
     lng: position.coords.longitude,
   };
+  if (lastPos.lat == null) {
+    lastPos = pos;
+  }
+  let heading = position.heading;
+  if (lastPos.lat != pos.lat || lastPos.lng != pos.lng) {
+    let distance = getDistanceFromLatLon(lastPos.lat, lastPos.lng, pos.lat, pos.lng);
+    console.log(distance, heading);
+  }
   map.setCenter(pos);
   locationMarker.setPosition(pos);
 }
@@ -74,7 +105,16 @@ function compassOrientation() {
           console.log("Not Supported!");
         }
     }).catch(console.error)
-    
+
+    DeviceMotionEvent.requestPermission().then(response => {
+      if (response === 'granted') {
+          window.addEventListener('devicemotion', MotionHandler, true);
+      }else if (result.state === 'prompt') {
+        console.log("Need prompt!");
+      }else{
+        console.log("Not Supported!");
+      }
+  }).catch(console.error)
   } else {
       
       // for non ios devices
@@ -83,10 +123,14 @@ function compassOrientation() {
 
 }
 let compassImage = document.getElementById('compass');
+let xDisplacement = document.getElementById('x-displacement');
+let yDisplacement = document.getElementById('y-displacement')
 function OrientationHandler(eventData){
   compassImage.style.transform = `rotate(${eventData.webkitCompassHeading}deg)`;
 }
-
+function MotionHandler(eventData){
+  xDisplacement.innerHTML = `X: ${eventData.webkit}`
+}
 
 document.getElementById('start').onclick = () => {
   time0 = performance.now();

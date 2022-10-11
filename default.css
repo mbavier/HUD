@@ -24,11 +24,18 @@ body {background-color: #000000;}
   height:20%;
 }
 
-#compass {
+#motion-info {
   position: fixed;
   bottom: 60px;
+  right: 1px;
   padding-bottom: 1%;
-  right: 25px;
+  padding-right: 1%;
+  color: aquamarine;
+  width:200px;
+  white-space: nowrap;
+}
+
+#compass {
   width:200px;
   height:200px;
 }
