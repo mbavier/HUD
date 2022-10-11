@@ -32,7 +32,7 @@ function success(position) {
     lat: position.coords.latitude,
     lng: position.coords.longitude,
   };
-  console.log(lat, lng)
+  console.log(pos.lat, pos.lng)
   if (lastPos.lat == null) {
     lastPos = pos;
     xDisplacement.innerHTML = "X: 0";
