@@ -104,6 +104,7 @@ let prevDisplacementY = 0;
 let prevVelocityX = 0;
 let prevVelocityY = 0;
 function MotionHandler(eventData){
+  console.log(eventData.acceleration.x, eventData.acceleration.y)
   prevVelocityX = eventData.acceleration.x * (eventData.interval/1000) + prevVelocityX;
   prevVelocityY = eventData.acceleration.y * (eventData.interval/1000) + prevVelocityY;
   prevDisplacementX = (prevVelocityX * (eventData.interval/1000)) + (eventData.acceleration.x * Math.pow((eventData.interval/1000),2)) + prevDisplacementX;
