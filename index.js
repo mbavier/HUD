@@ -32,8 +32,11 @@ function success(position) {
     lat: position.coords.latitude,
     lng: position.coords.longitude,
   };
+  console.log(lat, lng)
   if (lastPos.lat == null) {
     lastPos = pos;
+    xDisplacement.innerHTML = "X: 0";
+    yDisplacement.innerHTML = "Y: 0";
   }
   let heading = position.heading;
   if (lastPos.lat != pos.lat || lastPos.lng != pos.lng) {
