@@ -102,9 +102,9 @@ let currentFacingRad = null;
 // Motion Handler Shake method from Shake.js
 let shakeThreshold = 15;
 let lastMotion = {
-  x = null,
-  y = null,
-  z = null
+  x: null,
+  y: null,
+  z: null
 }
 
 let currentNS = 0;
