@@ -19,6 +19,9 @@ function deg2rad(deg) {
 
 let map, locationMarker;
 
+let xDisplacement = document.getElementById('x-displacement');
+let yDisplacement = document.getElementById('y-displacement')
+
 var lastPos = {
   lat: null,
   lng: null
@@ -36,6 +39,8 @@ function success(position) {
   if (lastPos.lat != pos.lat || lastPos.lng != pos.lng) {
     let distance = getDistanceFromLatLon(lastPos.lat, lastPos.lng, pos.lat, pos.lng);
     console.log(distance, heading);
+    xDisplacement.innerHTML = `X: ${distance * Math.cos(heading)}`;
+    yDisplacement.innerHTML = `Y: ${distance * Math.sin(heading)}`;
   }
   map.setCenter(pos);
   locationMarker.setPosition(pos);
@@ -106,15 +111,15 @@ function compassOrientation() {
         }
     }).catch(console.error)
 
-    DeviceMotionEvent.requestPermission().then(response => {
-      if (response === 'granted') {
-          window.addEventListener('devicemotion', MotionHandler, true);
-      }else if (result.state === 'prompt') {
-        console.log("Need prompt!");
-      }else{
-        console.log("Not Supported!");
-      }
-  }).catch(console.error)
+  //   DeviceMotionEvent.requestPermission().then(response => {
+  //     if (response === 'granted') {
+  //         window.addEventListener('devicemotion', MotionHandler, true);
+  //     }else if (result.state === 'prompt') {
+  //       console.log("Need prompt!");
+  //     }else{
+  //       console.log("Not Supported!");
+  //     }
+  // }).catch(console.error)
   } else {
       
       // for non ios devices
@@ -123,14 +128,13 @@ function compassOrientation() {
 
 }
 let compassImage = document.getElementById('compass');
-let xDisplacement = document.getElementById('x-displacement');
-let yDisplacement = document.getElementById('y-displacement')
+
 function OrientationHandler(eventData){
   compassImage.style.transform = `rotate(${eventData.webkitCompassHeading}deg)`;
 }
-function MotionHandler(eventData){
-  xDisplacement.innerHTML = `X: ${eventData.webkit}`
-}
+// function MotionHandler(eventData){
+//   xDisplacement.innerHTML = `X: ${eventData.webkit}`
+// }
 
 document.getElementById('start').onclick = () => {
   time0 = performance.now();
