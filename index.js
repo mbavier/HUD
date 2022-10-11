@@ -108,7 +108,7 @@ let prevVelocityX = 0;
 let prevVelocityY = 0;
 let prevTime = 0;
 function MotionHandler(eventData){
-  console.log(eventData.acceleration.x, eventData.acceleration.y);
+  
   let timeDiff = eventData.timeStamp - prevTime;
   prevTime = eventData.timeStamp;
 
@@ -132,7 +132,7 @@ function MotionHandler(eventData){
 
   let runningXAverage = xTotal / xArray.length;
   let runningYAverage = yTotal / yArray.length;
-
+  console.log(runningXAverage, runningYAverage);
   prevVelocityX = runningXAverage * (timeDiff/1000) + prevVelocityX;
   prevDisplacementX = (prevVelocityX * (timeDiff/1000)) /*+ (runningXAverage * Math.pow((timeDiff/1000),2))*/ + prevDisplacementX;
   xDisplacement.innerHTML = `X: ${prevDisplacementX}`;
