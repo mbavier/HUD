@@ -1,46 +1,13 @@
-function getDistanceFromLatLon(lat1,lon1,lat2,lon2) {
-  var R = 6371; // Radius of the earth in km
-  var dLat = deg2rad(lat2-lat1);  // deg2rad below
-  var dLon = deg2rad(lon2-lon1); 
-  var a = 
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
-    Math.sin(dLon/2) * Math.sin(dLon/2)
-    ; 
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-  var d = R * c * 1000; // Distance in km
-  return d;
-}
-
-function deg2rad(deg) {
-  return deg * (Math.PI/180)
-}
-
-
 let map, locationMarker;
-
-let prevPos = {
-  lat: null,
-  lng: null
-};
 
 let xDisplacement = document.getElementById('x-displacement');
 let yDisplacement = document.getElementById('y-displacement');
-let extraData = document.getElementById('extra');
 
 function success(position) {
   const pos = {
     lat: position.coords.latitude,
     lng: position.coords.longitude
   };
-
-  if (prevPos.lat == null || prevPos.lng == null) {
-    prevPos.lat = pos.lat;
-    prevPos.lng = pos.lng;
-  }
-  xDisplacement.innerHTML = `Distance = ${getDistanceFromLatLon(prevPos.lat, prevPos.lng, pos.lat, pos.lng)}`;
-  yDisplacement.innerHTML = `${position.speed} ${position.heading}`;
-  extraData.innerHTML = `${pos.lat} ${pos.lng}`;
   map.setCenter(pos);
   locationMarker.setPosition(pos);
 }
@@ -120,6 +87,8 @@ let compassImage = document.getElementById('compass');
 
 function OrientationHandler(eventData){
   compassImage.style.transform = `rotate(${eventData.webkitCompassHeading}deg)`;
+  xDisplacement.innerHTML = `X Rotation = ${eventData.beta}`;
+  yDisplacement.innerHTML = `Y Rotation = ${eventData.gamma}`;
 }
 
 document.getElementById('start').onclick = () => {
