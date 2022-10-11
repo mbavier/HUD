@@ -99,6 +99,9 @@ function OrientationHandler(eventData){
   compassImage.style.transform = `rotate(${eventData.webkitCompassHeading}deg)`;
 }
 
+let xArray = [];
+let yArray = [];
+
 let prevDisplacementX = 0;
 let prevDisplacementY = 0;
 let prevVelocityX = 0;
@@ -108,20 +111,35 @@ function MotionHandler(eventData){
   console.log(eventData.acceleration.x, eventData.acceleration.y);
   let timeDiff = eventData.timeStamp - prevTime;
   prevTime = eventData.timeStamp;
-  if (Math.abs(eventData.acceleration.x) > 0.15) {
-    prevVelocityX = eventData.acceleration.x * (timeDiff/1000) + prevVelocityX;
-    prevDisplacementX = (prevVelocityX * (timeDiff/1000)) /*+ (eventData.acceleration.x * Math.pow((timeDiff/1000),2))*/ + prevDisplacementX;
-    xDisplacement.innerHTML = `X: ${prevDisplacementX}`;
-  } else {
-    prevVelocityX = 0;
+
+  xArray.push(eventData.acceleration.x);
+  yArray.push(eventData.acceleration.y);
+
+  if(xArray.length >= 8) {
+    xArray.shift();
+    yArray.shift();
   }
-  if (Math.abs(eventData.acceleration.y) > 0.15) {
-    prevVelocityY = eventData.acceleration.y * (timeDiff/1000) + prevVelocityY;
-    prevDisplacementY = (prevVelocityY * (timeDiff/1000)) /*+ (eventData.acceleration.y * Math.pow((timeDiff/1000),2))*/ + prevDisplacementY;
-    yDisplacement.innerHTML = `Y: ${prevDisplacementY}`;
-  } else {
-    prevVelocityY = 0;
-  }
+
+  let xTotal = xArray.reduce( (total, val) => {
+    total += val;
+    return total;
+  });
+
+  let yTotal = yArray.reduce( (total, val) => {
+    total += val;
+    return total;
+  });
+
+  let runningXAverage = xTotal / xArray.length;
+  let runningYAverage = yTotal / yArray.length;
+
+  prevVelocityX = runningXAverage * (timeDiff/1000) + prevVelocityX;
+  prevDisplacementX = (prevVelocityX * (timeDiff/1000)) /*+ (runningXAverage * Math.pow((timeDiff/1000),2))*/ + prevDisplacementX;
+  xDisplacement.innerHTML = `X: ${prevDisplacementX}`;
+
+  prevVelocityY = runningYAverage * (timeDiff/1000) + prevVelocityY;
+  prevDisplacementY = (prevVelocityY * (timeDiff/1000)) /*+ (runningYAverage * Math.pow((timeDiff/1000),2))*/ + prevDisplacementY;
+  yDisplacement.innerHTML = `Y: ${prevDisplacementY}`;
 }
 
 document.getElementById('start').onclick = () => {
