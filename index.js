@@ -1,13 +1,46 @@
+function getDistanceFromLatLon(lat1,lon1,lat2,lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2-lat1);  // deg2rad below
+  var dLon = deg2rad(lon2-lon1); 
+  var a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2)
+    ; 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  var d = R * c * 1000; // Distance in km
+  return d;
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI/180)
+}
+
+
 let map, locationMarker;
 
+let prevPos = {
+  lat: null,
+  lng: null
+};
+
 let xDisplacement = document.getElementById('x-displacement');
-let yDisplacement = document.getElementById('y-displacement')
+let yDisplacement = document.getElementById('y-displacement');
+let extraData = document.getElementById('extra');
 
 function success(position) {
   const pos = {
     lat: position.coords.latitude,
-    lng: position.coords.longitude,
+    lng: position.coords.longitude
   };
+
+  if (prevPos.lat == null || prevPos.lng == null) {
+    prevPos.lat = pos.lat;
+    prevPos.lng = pos.lng;
+  }
+  xDisplacement.innerHTML = `Distance = ${getDistanceFromLatLon(prevPos.lat, prevPos.lng, pos.lat, pos.lng)}`;
+  yDisplacement.innerHTML = `${position.speed} ${position.heading}`;
+  extraData.innerHTML = `${pos.lat} ${pos.lng}`;
   map.setCenter(pos);
   locationMarker.setPosition(pos);
 }
@@ -76,16 +109,6 @@ function compassOrientation() {
           console.log("Not Supported!");
         }
     }).catch(console.error)
-
-    DeviceMotionEvent.requestPermission().then(response => {
-      if (response === 'granted') {
-          window.addEventListener('devicemotion', MotionHandler, true);
-      }else if (result.state === 'prompt') {
-        console.log("Need prompt!");
-      }else{
-        console.log("Not Supported!");
-      }
-  }).catch(console.error)
   } else {
       
       // for non ios devices
@@ -97,49 +120,6 @@ let compassImage = document.getElementById('compass');
 
 function OrientationHandler(eventData){
   compassImage.style.transform = `rotate(${eventData.webkitCompassHeading}deg)`;
-}
-
-let xArray = [];
-let yArray = [];
-
-let prevDisplacementX = 0;
-let prevDisplacementY = 0;
-let prevVelocityX = 0;
-let prevVelocityY = 0;
-let prevTime = 0;
-function MotionHandler(eventData){
-  
-  let timeDiff = eventData.timeStamp - prevTime;
-  prevTime = eventData.timeStamp;
-
-  xArray.push(eventData.acceleration.x);
-  yArray.push(eventData.acceleration.y);
-
-  if(xArray.length >= 64) {
-    xArray.shift();
-    yArray.shift();
-  }
-
-  let xTotal = xArray.reduce( (total, val) => {
-    total += val;
-    return total;
-  });
-
-  let yTotal = yArray.reduce( (total, val) => {
-    total += val;
-    return total;
-  });
-
-  let runningXAverage = xTotal / 64;
-  let runningYAverage = yTotal / 64;
-  console.log(runningXAverage, runningYAverage);
-  prevVelocityX = runningXAverage * (timeDiff/1000) + prevVelocityX;
-  prevDisplacementX = (prevVelocityX * (timeDiff/1000)) /*+ (runningXAverage * Math.pow((timeDiff/1000),2))*/ + prevDisplacementX;
-  xDisplacement.innerHTML = `X: ${prevDisplacementX}`;
-
-  prevVelocityY = runningYAverage * (timeDiff/1000) + prevVelocityY;
-  prevDisplacementY = (prevVelocityY * (timeDiff/1000)) /*+ (runningYAverage * Math.pow((timeDiff/1000),2))*/ + prevDisplacementY;
-  yDisplacement.innerHTML = `Y: ${prevDisplacementY}`;
 }
 
 document.getElementById('start').onclick = () => {
