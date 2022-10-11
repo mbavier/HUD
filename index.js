@@ -100,7 +100,7 @@ let compassImage = document.getElementById('compass');
 let currentFacingRad = null;
 
 // Motion Handler Shake method from Shake.js
-let shakeThreshold = 15;
+let shakeThreshold = 5;
 let lastMotion = {
   x: null,
   y: null,
