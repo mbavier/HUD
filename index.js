@@ -120,6 +120,7 @@ function MotionHandler(eventData) {
     lastMotion.x = current.x;
     lastMotion.y = current.y;
     lastMotion.z = current.z;
+    return;
   }
 
   deltaX = Math.abs(lastMotion.x - current.x);
@@ -133,6 +134,10 @@ function MotionHandler(eventData) {
     xDisplacement.innerHTML = `NS: ${currentNS}`;
     yDisplacement.innerHTML = `EW: ${currentEW}`;
   }
+
+  lastMotion.x = current.x;
+  lastMotion.y = current.y;
+  lastMotion.z = current.z;
 }
 
 
