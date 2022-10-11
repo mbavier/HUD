@@ -85,10 +85,17 @@ function compassOrientation() {
 }
 let compassImage = document.getElementById('compass');
 
+let calibrationBeta = null;
+let calibrationGamma = null;
+
 function OrientationHandler(eventData){
+  if (calibrationBeta == null) {
+    calibrationBeta = eventData.beta;
+    calibrationGamma = eventData.gamma;
+  }
   compassImage.style.transform = `rotate(${eventData.webkitCompassHeading}deg)`;
-  xDisplacement.innerHTML = `X Rotation = ${eventData.beta}`;
-  yDisplacement.innerHTML = `Y Rotation = ${eventData.gamma}`;
+  xDisplacement.innerHTML = `X Rotation = ${eventData.beta - calibrationBeta}`;
+  yDisplacement.innerHTML = `Y Rotation = ${eventData.gamma - calibrationGamma}`;
 }
 
 document.getElementById('start').onclick = () => {
