@@ -115,7 +115,7 @@ function MotionHandler(eventData){
   xArray.push(eventData.acceleration.x);
   yArray.push(eventData.acceleration.y);
 
-  if(xArray.length >= 8) {
+  if(xArray.length >= 64) {
     xArray.shift();
     yArray.shift();
   }
@@ -130,8 +130,8 @@ function MotionHandler(eventData){
     return total;
   });
 
-  let runningXAverage = xTotal / xArray.length;
-  let runningYAverage = yTotal / yArray.length;
+  let runningXAverage = xTotal / 64;
+  let runningYAverage = yTotal / 64;
   console.log(runningXAverage, runningYAverage);
   prevVelocityX = runningXAverage * (timeDiff/1000) + prevVelocityX;
   prevDisplacementX = (prevVelocityX * (timeDiff/1000)) /*+ (runningXAverage * Math.pow((timeDiff/1000),2))*/ + prevDisplacementX;
