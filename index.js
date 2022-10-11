@@ -138,10 +138,10 @@ function MotionHandler(eventData) {
 
 
 function OrientationHandler(eventData){
-  if (calibrationBeta == null) {
-    calibrationBeta = eventData.beta;
-    calibrationGamma = eventData.gamma;
-  }
+  // if (calibrationBeta == null) {
+  //   calibrationBeta = eventData.beta;
+  //   calibrationGamma = eventData.gamma;
+  // }
   compassImage.style.transform = `rotate(${eventData.webkitCompassHeading}deg)`;
   currentFacingRad = eventData.webkitCompassHeading * (Math.PI/180);
   // if (eventData.beta - calibrationBeta > 5) {
