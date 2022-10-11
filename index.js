@@ -103,15 +103,19 @@ let prevDisplacementX = 0;
 let prevDisplacementY = 0;
 let prevVelocityX = 0;
 let prevVelocityY = 0;
+let prevTime = 0;
 function MotionHandler(eventData){
-  if (Math.abs(eventData.acceleration.x) > 0.1) {
-    prevVelocityX = eventData.acceleration.x * (eventData.interval/1000) + prevVelocityX;
-    prevDisplacementX = (prevVelocityX * (eventData.interval/1000)) + (eventData.acceleration.x * Math.pow((eventData.interval/1000),2)) + prevDisplacementX;
+  console.log(eventData.acceleration.x, eventData.acceleration.y);
+  timeDiff = eventData.timeStamp - prevTime;
+  prevTime = eventData.timeStamp;
+  if (Math.abs(eventData.acceleration.x) > 0.15) {
+    prevVelocityX = eventData.acceleration.x * (timeDiff/1000) + prevVelocityX;
+    prevDisplacementX = (prevVelocityX * (timeDiff/1000)) + (eventData.acceleration.x * Math.pow((timeDiff/1000),2)) + prevDisplacementX;
     xDisplacement.innerHTML = `X: ${prevDisplacementX}`;
   }
-  if (Math.abs(eventData.acceleration.y) > 0.1) {
-    prevVelocityY = eventData.acceleration.y * (eventData.interval/1000) + prevVelocityY;
-    prevDisplacementY = (prevVelocityY * (eventData.interval/1000)) + (eventData.acceleration.y * Math.pow((eventData.interval/1000),2)) + prevDisplacementY;
+  if (Math.abs(eventData.acceleration.y) > 0.15) {
+    prevVelocityY = eventData.acceleration.y * (timeDiff/1000) + prevVelocityY;
+    prevDisplacementY = (prevVelocityY * (timeDiff/1000)) + (eventData.acceleration.y * Math.pow((timeDiff/1000),2)) + prevDisplacementY;
     yDisplacement.innerHTML = `Y: ${prevDisplacementY}`;
   }
 }
