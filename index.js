@@ -112,11 +112,15 @@ function MotionHandler(eventData){
     prevVelocityX = eventData.acceleration.x * (timeDiff/1000) + prevVelocityX;
     prevDisplacementX = (prevVelocityX * (timeDiff/1000)) /*+ (eventData.acceleration.x * Math.pow((timeDiff/1000),2))*/ + prevDisplacementX;
     xDisplacement.innerHTML = `X: ${prevDisplacementX}`;
+  } else {
+    prevVelocityX = 0;
   }
   if (Math.abs(eventData.acceleration.y) > 0.15) {
     prevVelocityY = eventData.acceleration.y * (timeDiff/1000) + prevVelocityY;
     prevDisplacementY = (prevVelocityY * (timeDiff/1000)) /*+ (eventData.acceleration.y * Math.pow((timeDiff/1000),2))*/ + prevDisplacementY;
     yDisplacement.innerHTML = `Y: ${prevDisplacementY}`;
+  } else {
+    prevVelocityY = 0;
   }
 }
 
