@@ -94,8 +94,19 @@ function OrientationHandler(eventData){
     calibrationGamma = eventData.gamma;
   }
   compassImage.style.transform = `rotate(${eventData.webkitCompassHeading}deg)`;
-  xDisplacement.innerHTML = `X Rotation = ${eventData.beta - calibrationBeta}`;
-  yDisplacement.innerHTML = `Y Rotation = ${eventData.gamma - calibrationGamma}`;
+  if (eventData.beta - calibrationBeta > 5) {
+    xDisplacement.innerHTML = `X Rotation = ${eventData.beta - calibrationBeta}`;
+  } else {
+    xDisplacement.innerHTML = `X Rotation = 0`
+  }
+
+  if (eventData.gamma - calibrationGamma > 5) {
+    yDisplacement.innerHTML = `Y Rotation = ${eventData.gamma - calibrationGamma}`;
+  } else {
+    yDisplacement.innerHTML = `Y Rotation = 0`
+  }
+  
+  
 }
 
 document.getElementById('start').onclick = () => {
