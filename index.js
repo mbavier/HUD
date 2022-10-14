@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import gsap from 'gsap';
 
 const scene = new THREE.Scene();
 
@@ -134,8 +135,23 @@ function compassOrientation() {
       
       // for non ios devices
       console.log("NonIOS! ");
-  }
-
+      window.addEventListener("keydown", (event) => {
+        if (event.key == "ArrowUp") {
+          gsap.to(camera.position, { duration:0.1, x: camera.position.x - 0.1*Math.sin(camera.rotation.y), z: camera.position.z - 0.1*Math.cos(camera.rotation.y)});
+        } else if (event.key == "q" || event.key == "e") {
+          if (event.key == "q") {
+            relativeFacingRad += 5 * (Math.PI/180);
+          } else if (event.key == "e") {
+            relativeFacingRad -= 5 * (Math.PI/180);
+          }
+          if (Math.abs(relativeFacingRad) > 2*Math.PI) {
+            relativeFacingRad = 0;
+            
+          }
+          camera.rotation.y = relativeFacingRad;
+        }
+      });
+}
 }
 let compassImage = document.getElementById('compass');
 
@@ -184,8 +200,7 @@ function MotionHandler(eventData) {
     if (timeDifference > timeout) {
       currentNS -= Math.cos(relativeFacingRad);
       currentEW += Math.sin(relativeFacingRad);
-      camera.position.z -= Math.cos(relativeFacingRad);
-      camera.position.x += Math.sin(relativeFacingRad);
+      gsap.to(camera.position, { duration:0.1, x: camera.position.x - 0.1*Math.sin(camera.rotation.y), z: camera.position.z - 0.1*Math.cos(camera.rotation.y)});
       lastTime = new Date();
     }
   }
