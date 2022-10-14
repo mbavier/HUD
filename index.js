@@ -4,6 +4,7 @@ const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.6, 1200);
 camera.position.z += 3;
+camera.position.y -= 1;
 
 const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setClearColor("#000000");
@@ -201,6 +202,7 @@ function OrientationHandler(eventData){
   // }
   compassImage.style.transform = `rotate(${eventData.webkitCompassHeading}deg)`;
   currentFacingRad = eventData.webkitCompassHeading * (Math.PI/180);
+  camera.rotateZ(currentFacingRad);
   // if (eventData.beta - calibrationBeta > 5) {
   //   xDisplacement.innerHTML = `X Rotation = ${eventData.beta - calibrationBeta}`;
   // } else {
