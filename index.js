@@ -3,7 +3,7 @@ import * as THREE from 'three';
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.6, 1200);
-camera.position.z += 3;
+camera.position.z += 10;
 camera.position.y -= 1;
 camera.rotation.order = 'ZXY';
 
@@ -142,6 +142,7 @@ let compassImage = document.getElementById('compass');
 // let calibrationBeta = null;
 // let calibrationGamma = null;
 let currentFacingRad = null;
+let relativeFacingRad = null;
 
 // Motion Handler Shake method from Shake.js
 let shakeThreshold = 0.8;
@@ -181,8 +182,8 @@ function MotionHandler(eventData) {
     timeDifference = currentTime.getTime() - lastTime.getTime();
     
     if (timeDifference > timeout) {
-      currentNS -= Math.cos(currentFacingRad);
-      currentEW += Math.sin(currentFacingRad)
+      currentNS -= Math.cos(relativeFacingRad);
+      currentEW += Math.sin(relativeFacingRad)
       camera.position.z = currentNS;
       camera.position.x = currentEW;
       lastTime = new Date();
@@ -203,6 +204,7 @@ function OrientationHandler(eventData){
   // }
   compassImage.style.transform = `rotate(${eventData.webkitCompassHeading}deg)`;
   currentFacingRad = eventData.webkitCompassHeading * (Math.PI/180);
+  relativeFacingRad = eventData.alpha * (Math.PI/180);
   camera.rotation.y = eventData.beta * (Math.PI/180);
   camera.rotation.z = eventData.alpha * (Math.PI/180);
   // if (eventData.beta - calibrationBeta > 5) {
