@@ -219,9 +219,9 @@ function OrientationHandler(eventData){
   // }
   compassImage.style.transform = `rotate(${eventData.webkitCompassHeading}deg)`;
   currentFacingRad = eventData.webkitCompassHeading * (Math.PI/180);
-  relativeFacingRad = eventData.beta * (Math.PI/180);
+  //relativeFacingRad = eventData.beta * (Math.PI/180);
   camera.rotation.y = eventData.alpha * (Math.PI/180);
-  camera.rotation.z = eventData.beta * (Math.PI/180);
+  //camera.rotation.z = eventData.beta * (Math.PI/180);
   // if (eventData.beta - calibrationBeta > 5) {
   //   xDisplacement.innerHTML = `X Rotation = ${eventData.beta - calibrationBeta}`;
   // } else {
