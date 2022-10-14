@@ -4,6 +4,7 @@ let xDisplacement = document.getElementById('x-displacement');
 let yDisplacement = document.getElementById('y-displacement');
 
 if ('serviceWorker' in navigator) {
+  screen.orientation.lock('landscape');
   window.addEventListener('load', function() {
     this.navigator.serviceWorker.register('service-worker.js').then(function(registration) {
       console.log('Registered');
