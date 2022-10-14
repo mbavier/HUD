@@ -137,7 +137,7 @@ function compassOrientation() {
       console.log("NonIOS! ");
       window.addEventListener("keydown", (event) => {
         if (event.key == "ArrowUp") {
-          gsap.to(camera.position, { duration:0.1, x: camera.position.x - 0.1*Math.sin(camera.rotation.y), z: camera.position.z - 0.1*Math.cos(camera.rotation.y)});
+          gsap.to(camera.position, { duration:0.2, x: camera.position.x - 1*Math.sin(camera.rotation.y), z: camera.position.z - 1*Math.cos(camera.rotation.y)});
         } else if (event.key == "q" || event.key == "e") {
           if (event.key == "q") {
             relativeFacingRad += 5 * (Math.PI/180);
@@ -200,7 +200,7 @@ function MotionHandler(eventData) {
     if (timeDifference > timeout) {
       currentNS -= Math.cos(relativeFacingRad);
       currentEW += Math.sin(relativeFacingRad);
-      gsap.to(camera.position, { duration:0.1, x: camera.position.x - 0.1*Math.sin(camera.rotation.y), z: camera.position.z - 0.1*Math.cos(camera.rotation.y)});
+      gsap.to(camera.position, { duration:0.1, x: camera.position.x - 2*Math.sin(camera.rotation.y), z: camera.position.z - 2*Math.cos(camera.rotation.y)});
       lastTime = new Date();
     }
   }
