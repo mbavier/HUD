@@ -1,7 +1,34 @@
-let map, locationMarker;
+import * as THREE from 'three';
 
-let xDisplacement = document.getElementById('x-displacement');
-let yDisplacement = document.getElementById('y-displacement');
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.6, 1200);
+camera.position.z += 3;
+
+const renderer = new THREE.WebGLRenderer({antialias: true});
+renderer.setClearColor("#000000");
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+})
+
+const geometry = new THREE.BoxGeometry(1, 1, 1);
+const material = new THREE.MeshBasicMaterial({color: 0xff00000});
+const box = new THREE.Mesh(geometry, material);
+scene.add(box);
+
+const rendering = function() {
+    requestAnimationFrame(rendering);
+    renderer.render(scene, camera);
+}
+
+rendering();
+
+let map, locationMarker;
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
@@ -18,49 +45,49 @@ if ('serviceWorker' in navigator) {
   }
 
 
-function success(position) {
-  const pos = {
-    lat: position.coords.latitude,
-    lng: position.coords.longitude
-  };
-  map.setCenter(pos);
-  locationMarker.setPosition(pos);
-}
+// function success(position) {
+//   const pos = {
+//     lat: position.coords.latitude,
+//     lng: position.coords.longitude
+//   };
+//   map.setCenter(pos);
+//   locationMarker.setPosition(pos);
+// }
 
-function getLocation() {
-  // Try HTML5 geolocation.
-  if (navigator.geolocation) {
-    navigator.geolocation.watchPosition(
-      success,
-      () => {
-        handleLocationError(true, map.getCenter());
-      }
-    );
-  } else {
-    // Browser doesn't support Geolocation
-    handleLocationError(false, map.getCenter());
-  }
-}
+// function getLocation() {
+//   // Try HTML5 geolocation.
+//   if (navigator.geolocation) {
+//     navigator.geolocation.watchPosition(
+//       success,
+//       () => {
+//         handleLocationError(true, map.getCenter());
+//       }
+//     );
+//   } else {
+//     // Browser doesn't support Geolocation
+//     handleLocationError(false, map.getCenter());
+//   }
+// }
 
-function initMap() {
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: -34.397, lng: 150.644 },
-    zoom: 15,
-  });
+// function initMap() {
+//   map = new google.maps.Map(document.getElementById("map"), {
+//     center: { lat: -34.397, lng: 150.644 },
+//     zoom: 15,
+//   });
 
-  const image =
-    "https://mbavier.github.io/HUD/location.png";
+//   const image =
+//     "https://mbavier.github.io/HUD/location.png";
 
-  locationMarker = new google.maps.Marker({
-    position: { lat: -34.397, lng: 150.644 },
-    map,
-    icon: image
-  });
-}
+//   locationMarker = new google.maps.Marker({
+//     position: { lat: -34.397, lng: 150.644 },
+//     map,
+//     icon: image
+//   });
+// }
 
-function handleLocationError(browserHasGeolocation, pos) {
-  console.log("no location");
-}
+// function handleLocationError(browserHasGeolocation, pos) {
+//   console.log("no location");
+// }
 
 let time0, time1;
 
@@ -154,9 +181,8 @@ function MotionHandler(eventData) {
     if (timeDifference > timeout) {
       currentNS += Math.cos(currentFacingRad);
       currentEW += Math.sin(currentFacingRad)
-    
-      xDisplacement.innerHTML = `NS: ${currentNS}`;
-      yDisplacement.innerHTML = `EW: ${currentEW}`;
+      camera.position.x = currentNS;
+      camera.position.y = currentEW;
       lastTime = new Date();
     }
   }
@@ -199,4 +225,4 @@ document.getElementById('start').onclick = () => {
   //requestAnimationFrame(step);
 };
 
-window.initMap = initMap;
+// window.initMap = initMap;
