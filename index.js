@@ -3,6 +3,21 @@ let map, locationMarker;
 let xDisplacement = document.getElementById('x-displacement');
 let yDisplacement = document.getElementById('y-displacement');
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    this.navigator.serviceWorker.register('service-worker.js').then(function(registration) {
+      console.log('Registered');
+    }, function(err) {
+      console.log('ServiceWorker registration failed: ', err);
+    }).catch(function(err) {
+      console.log(err);
+    });
+  });
+  } else {
+    console.log('serivce-worker is not supported');
+  }
+
+
 function success(position) {
   const pos = {
     lat: position.coords.latitude,
