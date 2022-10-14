@@ -203,8 +203,7 @@ function OrientationHandler(eventData){
   // }
   compassImage.style.transform = `rotate(${eventData.webkitCompassHeading}deg)`;
   currentFacingRad = eventData.webkitCompassHeading * (Math.PI/180);
-  camera.rotation.x = eventData.beta * (Math.PI/180);
-  camera.rotation.y = eventData.gamma * (Math.PI/180);
+  camera.rotation.y = eventData.beta * (Math.PI/180);
   camera.rotation.z = eventData.alpha * (Math.PI/180);
   // if (eventData.beta - calibrationBeta > 5) {
   //   xDisplacement.innerHTML = `X Rotation = ${eventData.beta - calibrationBeta}`;
