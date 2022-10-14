@@ -183,9 +183,9 @@ function MotionHandler(eventData) {
     
     if (timeDifference > timeout) {
       currentNS -= Math.cos(relativeFacingRad);
-      currentEW += Math.sin(relativeFacingRad)
-      camera.position.z = currentNS;
-      camera.position.x = currentEW;
+      currentEW += Math.sin(relativeFacingRad);
+      camera.position.z -= Math.cos(relativeFacingRad);
+      camera.position.x += Math.sin(relativeFacingRad);
       lastTime = new Date();
     }
   }
