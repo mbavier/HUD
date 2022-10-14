@@ -124,12 +124,17 @@ let lastMotion = {
 
 let currentNS = 0;
 let currentEW = 0;
+let timeout = 400;
+let lastTime = new Date();
+
 
 function MotionHandler(eventData) {
   let current = eventData.accelerationIncludingGravity;
   let deltaX = 0;
   let deltaY = 0;
   let deltaZ = 0;
+  var timeDifference;
+  var currentTime;
   
   if ((lastMotion.x == null) && (lastMotion.y == null) && (lastMotion.z == null)) {
     lastMotion.x = current.x;
@@ -143,11 +148,17 @@ function MotionHandler(eventData) {
   deltaZ = Math.abs(lastMotion.z - current.z);
   console.log(deltaX, deltaY, deltaZ);
   if ((((deltaX > shakeThreshold) && (deltaY > shakeThreshold)) || ((deltaX > shakeThreshold) && (deltaZ > shakeThreshold)) || ((deltaY > shakeThreshold) && (deltaZ > shakeThreshold))) && currentFacingRad != null) {
-    currentNS += Math.cos(currentFacingRad);
-    currentEW += Math.sin(currentFacingRad)
+    currentTime = new Date();
+    timeDifference = currentTime.getTime() - lastTime.getTime();
     
-    xDisplacement.innerHTML = `NS: ${currentNS}`;
-    yDisplacement.innerHTML = `EW: ${currentEW}`;
+    if (timeDifference > timeout) {
+      currentNS += Math.cos(currentFacingRad);
+      currentEW += Math.sin(currentFacingRad)
+    
+      xDisplacement.innerHTML = `NS: ${currentNS}`;
+      yDisplacement.innerHTML = `EW: ${currentEW}`;
+      lastTime = new Date();
+    }
   }
 
   lastMotion.x = current.x;
