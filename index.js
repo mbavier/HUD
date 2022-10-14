@@ -179,10 +179,10 @@ function MotionHandler(eventData) {
     timeDifference = currentTime.getTime() - lastTime.getTime();
     
     if (timeDifference > timeout) {
-      currentNS += Math.cos(currentFacingRad);
+      currentNS -= Math.cos(currentFacingRad);
       currentEW += Math.sin(currentFacingRad)
-      camera.position.x = currentNS;
-      camera.position.y = currentEW;
+      camera.position.z = currentNS;
+      camera.position.x = currentEW;
       lastTime = new Date();
     }
   }
