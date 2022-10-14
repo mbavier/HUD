@@ -219,7 +219,6 @@ function OrientationHandler(eventData){
 document.getElementById('start').onclick = () => {
   time0 = performance.now();
   document.getElementById('start').style.display = "none";
-  document.getElementById('map').style.visibility = "visible";
   getLocation()
   compassOrientation();
   //requestAnimationFrame(step);
