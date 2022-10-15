@@ -221,7 +221,7 @@ function OrientationHandler(eventData){
   currentFacingRad = eventData.webkitCompassHeading * (Math.PI/180);
   //relativeFacingRad = eventData.beta * (Math.PI/180);
   
-  camera.rotation.y = eventData.webkitCompassHeading * (Math.PI/180);
+  camera.rotation.y = (360 - eventData.webkitCompassHeading) * (Math.PI/180);
   //camera.rotation.y = eventData.alpha * (Math.PI/180);
   //camera.rotation.z = eventData.beta * (Math.PI/180);
   // if (eventData.beta - calibrationBeta > 5) {
