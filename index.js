@@ -8,6 +8,84 @@ camera.position.z += 10;
 camera.position.y -= 1;
 camera.rotation.order = 'ZXY';
 
+const parameters = {};
+parameters.count = 500000;
+parameters.size = 0.01;
+parameters.radius = 10;
+parameters.branches = 3;
+parameters.spin = 1;
+parameters.randomness = 0.2
+parameters.randomnessPower = 3;
+parameters.insideColor = '#ff6030';
+parameters.outsideColor = '#1b3984';
+
+let particleGeo = null
+let particleMat = null
+let points = null
+
+const generateGalaxy = () => {
+  /**
+   * Geometry
+   */
+
+  if (points !== null) {
+    particleGeo.dispose();
+    particleMat.dispose();
+      scene.remove(points);
+  }
+
+  particleGeo = new THREE.BufferGeometry();
+  const positions = new Float32Array(parameters.count * 3);
+  const colors = new Float32Array(parameters.count * 3);
+
+  const insideColor = new THREE.Color(parameters.insideColor);
+  const outsideColor = new THREE.Color(parameters.outsideColor);
+
+  
+  
+
+  for (let i = 0; i < parameters.count; i++) {
+      const i3 = i * 3;
+      /*
+      positions[i3] = (Math.random() - 0.5) * 3;
+      positions[i3 + 1] = (Math.random() - 0.5) * 3;
+      positions[i3 + 2] = (Math.random() - 0.5) * 3;
+      */
+
+      const radius = Math.random() * parameters.radius;
+      const spinAngle = radius * parameters.spin;
+      const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2
+      
+      const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
+      const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius - 2;
+      const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
+
+      positions[i3] = Math.cos(branchAngle+spinAngle) * radius + randomX;
+      positions[i3 + 1] = randomY;
+      positions[i3 + 2] = Math.sin(branchAngle+spinAngle) * radius + randomZ;
+      
+      const mixedColor = insideColor.clone();
+      mixedColor.lerp(outsideColor, radius / parameters.radius);
+      colors[i3] = mixedColor.r;
+      colors[i3 + 1] = mixedColor.g;
+      colors[i3 + 2] = mixedColor.b;
+  }
+
+  particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  particleGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+  particleMat = new THREE.PointsMaterial( {
+      size: parameters.size,
+      sizeAttenuation: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      vertexColors: true
+  });
+
+  points = new THREE.Points(particleGeo, particleMat);
+  scene.add(points);
+}
+generateGalaxy();
 const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setClearColor("#000000");
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -19,10 +97,10 @@ window.addEventListener('resize', () => {
     camera.updateProjectionMatrix();
 })
 
-const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshBasicMaterial({color: 0xff00000});
-const box = new THREE.Mesh(geometry, material);
-scene.add(box);
+// const geometry = new THREE.BoxGeometry(1, 1, 1);
+// const material = new THREE.MeshBasicMaterial({color: 0xff00000});
+// const box = new THREE.Mesh(geometry, material);
+// scene.add(box);
 
 const rendering = function() {
     requestAnimationFrame(rendering);
@@ -136,7 +214,7 @@ function compassOrientation() {
       // for non ios devices
       console.log("NonIOS! ");
       window.addEventListener("keydown", (event) => {
-        if (event.key == "ArrowUp") {
+        if (event.key == "w") {
           gsap.to(camera.position, { duration:0.2, x: camera.position.x - 0.75*Math.sin(camera.rotation.y), z: camera.position.z - 0.75*Math.cos(camera.rotation.y)});
         } else if (event.key == "q" || event.key == "e") {
           if (event.key == "q") {
@@ -146,7 +224,6 @@ function compassOrientation() {
           }
           if (Math.abs(relativeFacingRad) > 2*Math.PI) {
             relativeFacingRad = 0;
-            
           }
           camera.rotation.y = relativeFacingRad;
         }
